@@ -34,6 +34,6 @@ Ga naar http://localhost om je webapp te openen.
 
 Ga naar http://localhost:8000 om de gebruikersinterface van je MySQL-database, PhpMyAdmin, te openen.
 
-### Mailhog
+### Mailpit
 
-Ga naar http://localhost:8025 om de mailgebruikersinterface van Mailhog te openen.
+Ga naar http://localhost:8025 om de mailgebruikersinterface van Mailpit te openen.
