@@ -42,7 +42,7 @@ services:
     environment:
       - TZ=Europe/Amsterdam
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin:latest
     ports:
       - "8000:80"
     environment:
