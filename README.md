@@ -1,36 +1,39 @@
 # DOCKER TEMPLATE
 
-## BASE Template
+## BASIS-template
 
-You can use this template to create many repositories and have the default microservices at your disposal when developing your webapp.
+Je kunt deze template gebruiken om meerdere repositories aan te maken en tijdens de ontwikkeling van je webapp de standaardmicroservices tot je beschikking te hebben.
 
-## Start 
-**Follow these steps to make it work for your project**
+## Starten
 
-### Use Template
+**Volg deze stappen om de template voor je project te gebruiken.**
 
-1. Press the green button that says `Use this template`
-2. Choose `Create a new repository`
-3. Now give your repo a correct name, i.e. myfirstproject
-4. Clone the project to your development machine
+### Template gebruiken
 
-### Set your project
+1. Klik op de groene knop met de tekst `Use this template`.
+2. Kies `Create a new repository`.
+3. Geef je repository een passende naam, bijvoorbeeld `myfirstproject`.
+4. Clone het project naar je ontwikkelmachine.
 
-1. Change the `.env`-file to match your project database name:
+### Je project instellen
 
-### Launch
+1. Pas het `.env`-bestand aan zodat de databasenaam overeenkomt met die van je project.
 
-1. Launch your services/contaienrs by opening a `terminal` within the folder of your project
-2. Write: `docker compose up`
+### Starten
 
-## Available applications
+1. Start je services/containers door een `terminal` te openen in de map van je project.
+2. Voer het volgende commando uit: `docker compose up`
 
-### Web app
-To access your webapp go to http://localhost
+## Beschikbare applicaties
+
+### Webapp
+
+Ga naar http://localhost om je webapp te openen.
+
 ### PhpMyAdmin
 
-To access your mysql database UI called PhpMyAdmin, go to http://localhost:8000
+Ga naar http://localhost:8000 om de gebruikersinterface van je MySQL-database, PhpMyAdmin, te openen.
 
 ### Mailhog
-To access your mail UI called Mailhog, go to http://localhost:8025
 
+Ga naar http://localhost:8025 om de mailgebruikersinterface van Mailhog te openen.
