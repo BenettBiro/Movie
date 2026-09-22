@@ -38,7 +38,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 <body>
 
     <nav>
-        <div class="nav-inner">
+        <div class="nav-inner"> 
             <div class="nav-logo">Sports</div>
             <div class="nav-right">
                 <span class="timer-label">

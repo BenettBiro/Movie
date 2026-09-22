@@ -21,7 +21,7 @@ include 'films_data.php';
                     <p><?php echo htmlspecialchars($Films['Film_subtitel']); ?></p>
                     <p><?php echo htmlspecialchars($Films['Genre']); ?></p>
                     <h3> Taal:<?php echo htmlspecialchars($Films['Taal']); ?> </h3>
-                    <h3><?php echo htmlspecialchars($Films['Duur']); ?> Minuten</h3>
+                    <h3><?php echo htmlspecialchars($Films['Duur']); ?> Minute</h3>
 
                 </div>
                 <a href="detailpagina.php?name=<?php echo urlencode($Films['Film_titel']); ?>">Meer informatie →</a>
