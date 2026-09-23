@@ -31,16 +31,16 @@ $userCount = $conn->query("SELECT COUNT(*) FROM Users")->fetchColumn();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medewerker Dashboard</title>
     <link rel="stylesheet" href="style.css">
-   
+
 </head>
 
 <body>
 
     <div class="staff-bar">
         <div class="staff-bar-inner">
-            <a href="M_ingelogged.php" class="btn-grey">Dashboard</a>
-            <a href="M_films_beheer.php" class="btn-grey">Films beheren</a>
-            <a href="M_users_beheer.php" class="btn-grey">Gebruikers beheren</a>
+
+            <a href="films_beheer.php" class="btn-grey">Films beheren</a>
+            <a href="user_beheer.php" class="btn-grey">Gebruikers beheren</a>
         </div>
     </div>
 

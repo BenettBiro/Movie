@@ -31,7 +31,7 @@
     }
     ?>
 
-    <a href="ingelogged.php" class="back-link">&larr; Back</a>
+    <a href="index.php" class="back-link">&larr; Back</a>
     
     
     
