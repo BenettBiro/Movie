@@ -42,7 +42,7 @@ if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
             <span class="staff-bar-label">Beheer</span>
             <a href="M_ingelogged.php" class="btn-grey">Dashboard</a>
             <a href="films_lijst.php" class="btn-grey active">Films beheren</a>
-            <a href="M_users_beheer.php" class="btn-grey">Gebruikers beheren</a>
+            <a href="user_beheer.php" class="btn-grey">Gebruikers beheren</a>
         </div>
     </div>
 

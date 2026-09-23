@@ -32,6 +32,18 @@ if ($zoekterm !== '') {
     $stmt->execute(['zoekterm' => '%' . $zoekterm . '%']);
     $resultaten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+$statusBerichten = [
+    'lid_gemaakt' => ['tekst' => 'Gebruiker is nu lid.', 'type' => 'succes'],
+    'lid_ingetrokken' => ['tekst' => 'Lidmaatschap ingetrokken.', 'type' => 'succes'],
+    'medewerker_gemaakt' => ['tekst' => 'Gebruiker is nu medewerker.', 'type' => 'succes'],
+    'medewerker_ingetrokken' => ['tekst' => 'Medewerkersrol ingetrokken.', 'type' => 'succes'],
+    'gebruiker_verwijderd' => ['tekst' => 'Gebruiker verwijderd.', 'type' => 'succes'],
+];
+$melding = null;
+if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
+    $melding = $statusBerichten[$_GET['status']];
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,8 +62,8 @@ if ($zoekterm !== '') {
         <div class="staff-bar-inner">
             <span class="staff-bar-label">Beheer</span>
             <a href="M_ingelogged.php" class="btn-grey">Dashboard</a>
-            <a href="M_films_beheer.php" class="btn-grey">Films beheren</a>
-            <a href="M_users_beheer.php" class="btn-grey">Gebruikers beheren</a>
+            <a href="films_lijst.php" class="btn-grey">Films beheren</a>
+            <a href="User_Search.php" class="btn-grey active">Gebruikers beheren</a>
         </div>
     </div>
 
@@ -83,6 +95,13 @@ if ($zoekterm !== '') {
         <div class="detail-card">
             <div class="detail-content">
 
+                <?php if ($melding): ?>
+                    <p
+                        style="color: <?php echo $melding['type'] === 'succes' ? 'green' : 'var(--accent)'; ?>; font-weight: 600;">
+                        <?php echo htmlspecialchars($melding['tekst']); ?>
+                    </p>
+                <?php endif; ?>
+
                 <form method="POST" action="User_Search.php">
                     <input type="hidden" name="id" value="<?php echo $user['user_id']; ?>">
                     <input type="text" name="zoekterm" value="<?php echo htmlspecialchars($zoekterm); ?>"
@@ -92,31 +111,27 @@ if ($zoekterm !== '') {
 
                 <?php if ($zoekterm !== ''): ?>
                     <h2 class="detail-title" style="margin-top: 2rem; font-size: 1.4rem;">
-                        Resultaten voor "
-                        <?php echo htmlspecialchars($zoekterm); ?>"
+                        Resultaten voor "<?php echo htmlspecialchars($zoekterm); ?>"
                     </h2>
 
                     <?php if (empty($resultaten)): ?>
                         <p>Geen gebruikers gevonden.</p>
                     <?php else: ?>
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <table class="data-table">
                             <thead>
-                                <tr style="text-align: left; border-bottom: 2px solid #e5e7eb;">
-                                    <th style="padding: 0.6rem;">Gebruikersnaam</th>
-                                    <th style="padding: 0.6rem;">Email</th>
-                                    <th style="padding: 0.6rem;">Rol</th>
+                                <tr>
+                                    <th>Gebruikersnaam</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Acties</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($resultaten as $r): ?>
-                                    <tr style="border-bottom: 1px solid #f3f4f6;">
-                                        <td style="padding: 0.6rem;">
-                                            <?php echo htmlspecialchars($r['Username']); ?>
-                                        </td>
-                                        <td style="padding: 0.6rem;">
-                                            <?php echo htmlspecialchars($r['Email']); ?>
-                                        </td>
-                                        <td style="padding: 0.6rem;">
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($r['Username']); ?></td>
+                                        <td><?php echo htmlspecialchars($r['Email']); ?></td>
+                                        <td>
                                             <?php
                                             if (!empty($r['is_employee'])) {
                                                 echo '<span class="staff-badge">Medewerker</span>';
@@ -126,6 +141,58 @@ if ($zoekterm !== '') {
                                                 echo '<span style="color:#9ca3af;">Geen rol</span>';
                                             }
                                             ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($r['user_id'] == $_SESSION['id']): ?>
+                                                <span style="color:#9ca3af; font-size:0.85rem;">Dit ben jij</span>
+                                            <?php else: ?>
+
+                                                <?php if (empty($r['is_member'])): ?>
+                                                    <form method="POST" action="manage_user.php" style="display:inline;">
+                                                        <input type="hidden" name="user_id" value="<?php echo $r['user_id']; ?>">
+                                                        <input type="hidden" name="actie" value="maak_lid">
+                                                        <input type="hidden" name="zoekterm"
+                                                            value="<?php echo htmlspecialchars($zoekterm); ?>">
+                                                        <button type="submit" class="btn-blue">Maak lid</button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <form method="POST" action="manage_user.php" style="display:inline;">
+                                                        <input type="hidden" name="user_id" value="<?php echo $r['user_id']; ?>">
+                                                        <input type="hidden" name="actie" value="verwijder_lid">
+                                                        <input type="hidden" name="zoekterm"
+                                                            value="<?php echo htmlspecialchars($zoekterm); ?>">
+                                                        <button type="submit" class="btn-grey">Verwijder lidmaatschap</button>
+                                                    </form>
+                                                <?php endif; ?>
+
+                                                <?php if (empty($r['is_employee'])): ?>
+                                                    <form method="POST" action="manage_user.php" style="display:inline;">
+                                                        <input type="hidden" name="user_id" value="<?php echo $r['user_id']; ?>">
+                                                        <input type="hidden" name="actie" value="maak_medewerker">
+                                                        <input type="hidden" name="zoekterm"
+                                                            value="<?php echo htmlspecialchars($zoekterm); ?>">
+                                                        <button type="submit" class="btn-blue">Maak medewerker</button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <form method="POST" action="manage_user.php" style="display:inline;">
+                                                        <input type="hidden" name="user_id" value="<?php echo $r['user_id']; ?>">
+                                                        <input type="hidden" name="actie" value="verwijder_medewerker">
+                                                        <input type="hidden" name="zoekterm"
+                                                            value="<?php echo htmlspecialchars($zoekterm); ?>">
+                                                        <button type="submit" class="btn-grey">Verwijder medewerker</button>
+                                                    </form>
+                                                <?php endif; ?>
+
+                                                <form method="POST" action="manage_user.php" style="display:inline;"
+                                                    onsubmit="return confirm('Weet je zeker dat je &quot;<?php echo htmlspecialchars(addslashes($r['Username'])); ?>&quot; volledig wilt verwijderen?');">
+                                                    <input type="hidden" name="user_id" value="<?php echo $r['user_id']; ?>">
+                                                    <input type="hidden" name="actie" value="verwijder_gebruiker">
+                                                    <input type="hidden" name="zoekterm"
+                                                        value="<?php echo htmlspecialchars($zoekterm); ?>">
+                                                    <button type="submit" class="btn-red">Verwijder gebruiker</button>
+                                                </form>
+
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

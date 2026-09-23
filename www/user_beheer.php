@@ -1,85 +1,63 @@
 <?php
 session_start();
+require 'database.php';
 
-if (!isset($_SESSION['id'])) {
-    header('Location: inloggen.php');
-    exit;
-}
-
-if ($_SESSION['rol'] != 'medewerker') {
+if (!isset($_SESSION['id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
     header('Location: index.php');
     exit;
 }
 
-require 'database.php';
+$userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+$actie = $_POST['actie'] ?? '';
+$zoekterm = $_POST['zoekterm'] ?? '';
 
-$zoekterm = isset($_POST['zoekterm']) ? $_POST['zoekterm'] : '';
-$users = [];
-
-if (!empty($zoekterm)) {
-    $sql = "SELECT * FROM Users WHERE firstname LIKE :zoekterm OR username LIKE :zoekterm OR Rol LIKE :zoekterm";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute(['zoekterm' => '%' . $zoekterm . '%']);
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Voorkom dat een medewerker zichzelf per ongeluk degradeert/verwijdert via deze route
+if ($userId <= 0 || $userId === (int) $_SESSION['id']) {
+    header('Location: User_Search.php?zoekterm=' . urlencode($zoekterm));
+    exit;
 }
-?>
 
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <title>Zoekresultaten</title>
-    <link rel="stylesheet" href="style.css">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+$status = '';
 
-    <nav>
-        <div class="nav-inner">
-            <div class="nav-logo">Sports</div>
-            <div class="nav-right">
-                <a href="Employee_Dashboard.php?id=<?php echo $_SESSION['id']; ?>" class="btn-blue">Terug</a>
-                <a href="uitloggen.php?logout=1" class="btn-red">Uitloggen</a>
-            </div>
-        </div>
-    </nav>
+switch ($actie) {
+    case 'maak_lid':
+        $check = $conn->prepare("SELECT 1 FROM Members WHERE user_id = :id");
+        $check->execute(['id' => $userId]);
+        if (!$check->fetchColumn()) {
+            $stmt = $conn->prepare("INSERT INTO Members (user_id, Join_date) VALUES (:id, CURDATE())");
+            $stmt->execute(['id' => $userId]);
+        }
+        $status = 'lid_gemaakt';
+        break;
 
-    <section class="hero">
-        <div class="hero-inner">
-            <h1>Zoekresultaten</h1>
-            <p>Resultaten voor: <strong><?php echo $zoekterm; ?></strong></p>
-        </div>
-    </section>
+    case 'verwijder_lid':
+        $stmt = $conn->prepare("DELETE FROM Members WHERE user_id = :id");
+        $stmt->execute(['id' => $userId]);
+        $status = 'lid_ingetrokken';
+        break;
 
-    <main class="main-content">
-        <?php if (empty($user)): ?>
-            <p>Geen gebruikers gevonden voor "<?php echo $zoekterm; ?>".</p>
-        <?php else: ?>
-            <div class="workouts-grid">
-                <?php foreach ($users as $user): ?>
-                    <div class="workout-card">
-                        <div class="workout-card-body">
-                            <strong><?php echo $user['firstname']; ?></strong>
-                            <p>Gebruikersnaam: <?php echo $user['username']; ?></p>
-                            <p>Email: <?php echo $user['email']; ?></p>
-                            <p>Rol: <?php echo $user['Rol']; ?></p>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </main>
+    case 'maak_medewerker':
+        $check = $conn->prepare("SELECT 1 FROM Employee WHERE user_id = :id");
+        $check->execute(['id' => $userId]);
+        if (!$check->fetchColumn()) {
+            $stmt = $conn->prepare("INSERT INTO Employee (user_id, Start_date) VALUES (:id, CURDATE())");
+            $stmt->execute(['id' => $userId]);
+        }
+        $status = 'medewerker_gemaakt';
+        break;
 
-    <footer>
-        <div class="footer-inner">
-            <div>
-                <h4>Over Ons</h4>
-                <p>Bibliotheek De Wijze Uil biedt een grote selectie boeken voor iedereen.</p>
-            </div>
-            <div></div>
-            <div></div>
-        </div>
-    </footer>
+    case 'verwijder_medewerker':
+        $stmt = $conn->prepare("DELETE FROM Employee WHERE user_id = :id");
+        $stmt->execute(['id' => $userId]);
+        $status = 'medewerker_ingetrokken';
+        break;
 
-</body>
-</html>
+    case 'verwijder_gebruiker':
+        $stmt = $conn->prepare("DELETE FROM Users WHERE user_id = :id");
+        $stmt->execute(['id' => $userId]);
+        $status = 'gebruiker_verwijderd';
+        break;
+}
+
+header('Location: User_Search.php?zoekterm=' . urlencode($zoekterm) . ($status ? '&status=' . $status : ''));
+exit;

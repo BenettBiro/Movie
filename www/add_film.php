@@ -18,6 +18,10 @@ $fout = null;
 if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
     $fout = $statusBerichten[$_GET['status']];
 }
+
+$genres = ['Actie', 'Avontuur', 'Animatie', 'Komedie', 'Drama', 'Fantasy', 'Horror', 'Misdaad', 'Romantiek', 'Sciencefiction', 'Thriller', 'Documentaire'];
+$talen = ['Nederlands', 'Engels', 'Frans', 'Duits', 'Spaans', 'Italiaans', 'Koreaans', 'Japans'];
+$landen = ['Nederland', 'België', 'Verenigde Staten', 'Verenigd Koninkrijk', 'Frankrijk', 'Duitsland', 'Spanje', 'Italië', 'Zuid-Korea', 'Japan'];
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -36,7 +40,7 @@ if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
             <span class="staff-bar-label">Beheer</span>
             <a href="M_ingelogged.php" class="btn-grey">Dashboard</a>
             <a href="films_lijst.php" class="btn-grey active">Films beheren</a>
-            <a href="M_users_beheer.php" class="btn-grey">Gebruikers beheren</a>
+            <a href="User_Search.php" class="btn-grey">Gebruikers beheren</a>
         </div>
     </div>
 
@@ -85,7 +89,12 @@ if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
 
                     <div class="form-group">
                         <label>Genre</label>
-                        <input type="text" name="Genre">
+                        <select name="Genre">
+                            <option value="">-- Kies een genre --</option>
+                            <?php foreach ($genres as $g): ?>
+                                <option value="<?php echo htmlspecialchars($g); ?>"><?php echo htmlspecialchars($g); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -95,12 +104,22 @@ if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
 
                     <div class="form-group">
                         <label>Taal</label>
-                        <input type="text" name="Taal">
+                        <select name="Taal">
+                            <option value="">-- Kies een taal --</option>
+                            <?php foreach ($talen as $t): ?>
+                                <option value="<?php echo htmlspecialchars($t); ?>"><?php echo htmlspecialchars($t); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label>Land</label>
-                        <input type="text" name="Land">
+                        <select name="Land">
+                            <option value="">-- Kies een land --</option>
+                            <?php foreach ($landen as $l): ?>
+                             <option value="<?php echo htmlspecialchars($l); ?>"><?php echo htmlspecialchars($l); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
