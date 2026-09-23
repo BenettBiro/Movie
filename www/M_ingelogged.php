@@ -54,8 +54,8 @@ $userCount = $conn->query("SELECT COUNT(*) FROM Users")->fetchColumn();
             <div class="nav-right">
                 <span class="timer-label">Welkom, <?php echo htmlspecialchars($user['Username']); ?></span>
 
-                <a href="Personal_Dashboard.php?id=<?php echo $user['user_id']; ?>" class="btn-blue">
-                    Mijn Dashboard
+                <a href="M_Dashboard.php?id=<?php echo $user['user_id']; ?>" class="btn-blue">
+                    Mijn Gegevens
                 </a>
 
                 <a href="uitloggen.php?logout=1" class="btn-red">

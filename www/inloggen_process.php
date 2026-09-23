@@ -31,11 +31,13 @@ if ($dbuser['Password'] !== $passwordForm) {
     exit;
 }
 
-session_regenerate_id(true);
+
 
 $_SESSION['id'] = $dbuser['user_id'];
 $_SESSION['email'] = $dbuser['Email'];
 $_SESSION['username'] = $dbuser['Username'];
+
+
 
 if (!empty($dbuser['is_employee'])) {
     $_SESSION['rol'] = 'medewerker';

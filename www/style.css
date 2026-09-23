@@ -484,8 +484,9 @@ footer {
 
 .staff-stats {
     display: flex;
-    gap: 16px;
+    gap: 300px;
     margin: 20px 0 0;
+    grid-column: auto;
 }
 
 .staff-stat-card {

@@ -6,7 +6,7 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-if ($_SESSION['rol'] != 'lid') {
+if ($_SESSION['rol'] != 'medewerker') {
     header('Location: index.php');
     exit;
 }
@@ -41,7 +41,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 <body>
 
     <nav>
-        <div class="nav-inner"> 
+        <div class="nav-inner">
             <div class="nav-logo">Sports</div>
             <div class="nav-right">
                 <span class="timer-label">
@@ -50,7 +50,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 <span class="timer-label">
                     Tijd op pagina: <span id="timer" class="timer">00:00</span>
                 </span>
-                <a href="ingelogged.php?id=<?php echo $user['user_id']; ?>" class="btn-blue">
+                <a href="M_ingelogged.php?id=<?php echo $user['user_id']; ?>" class="btn-blue">
                     Hoofdpagina
                 </a>
                 <a href="uitloggen.php?logout=1" class="btn-red">Uitloggen</a>

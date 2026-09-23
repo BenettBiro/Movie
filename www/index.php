@@ -32,8 +32,10 @@
                 <a href="inloggen.php" class="nav-login">Inloggen</a>
                 <!DOCTYPE html>
                 <html>
+
                 <body>
                 </body>
+
                 </html>
             </div>
         </div>
@@ -43,7 +45,7 @@
         <div class="hero">
             <div class="hero-inner">
                 <h1>Welkom bij Bioscoop De Filmfanaten</h1>
-                <p>Ontdek onze uitgebreide  Film collectie</p>
+                <p>Ontdek onze uitgebreide Film collectie</p>
             </div>
         </div>
 
