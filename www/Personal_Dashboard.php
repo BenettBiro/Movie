@@ -6,7 +6,7 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-if ($_SESSION['rol'] != 'lid') {
+if (strtolower($_SESSION['rol'] ?? '') != 'lid') {
     header('Location: index.php');
     exit;
 }
@@ -24,6 +24,14 @@ $stmt = $conn->prepare($sql);
 $stmt->execute(['id' => $id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$sql = "SELECT r.Reservering_id, r.Reserveerdatum, f.Film_id, f.Film_titel, f.Genre
+        FROM Reserveringen r
+        JOIN Films f ON f.Film_id = r.Film_id
+        WHERE r.user_id = :id
+        ORDER BY r.Reserveerdatum DESC";
+$stmt = $conn->prepare($sql);
+$stmt->execute(['id' => $id]);
+$reserveringen = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -41,11 +49,11 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 <body>
 
     <nav>
-        <div class="nav-inner"> 
-            <div class="nav-logo">Sports</div>
+        <div class="nav-inner">
+            <div class="nav-logo">Films</div>
             <div class="nav-right">
                 <span class="timer-label">
-                    Welkom, <?php echo $user['Username']; ?>
+                    Welkom, <?php echo htmlspecialchars($user['Username']); ?>
                 </span>
                 <span class="timer-label">
                     Tijd op pagina: <span id="timer" class="timer">00:00</span>
@@ -74,27 +82,50 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div class="detail-info">
                     <div class="detail-box">
                         <strong>Gebruikersnaam</strong>
-                        <p><?php echo $user['Username']; ?></p>
+                        <p><?php echo htmlspecialchars($user['Username']); ?></p>
                     </div>
-                    <div class="detail-box">
-                        <strong>Voornaam</strong>
-                        <p><?php echo $user['firstname']; ?></p>
-                    </div>
-                    <div class="detail-box">
-                        <strong>Achternaam</strong>
-                        <p><?php echo $user['lastname']; ?></p>
-                    </div>
-
                     <div class="detail-box">
                         <strong>Email</strong>
-                        <p><?php echo $user['Email']; ?></p>
+                        <p><?php echo htmlspecialchars($user['Email']); ?></p>
                     </div>
-                    <div class="detail-box">
-                        <strong>Rol</strong>
-                        <p><?php echo $user['rol']; ?></p>
-                    </div>
-
                 </div>
+            </div>
+        </div>
+
+        <div class="detail-card" style="margin-top: 2rem;">
+            <div class="detail-content">
+                <h2 class="detail-title">Mijn Reserveringen</h2>
+                <p class="detail-type">Films die je hebt gereserveerd.</p>
+
+                <?php if (empty($reserveringen)): ?>
+                    <p>Je hebt nog geen films gereserveerd.</p>
+                <?php else: ?>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Film</th>
+                                <th>Genre</th>
+                                <th>Gereserveerd op</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($reserveringen as $r): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($r['Film_titel']); ?></td>
+                                    <td><?php echo htmlspecialchars($r['Genre']); ?></td>
+                                    <td><?php echo htmlspecialchars($r['Reserveerdatum']); ?></td>
+                                    <td>
+                                        <a href="detailpagina.php?name=<?php echo urlencode($r['Film_titel']); ?>"
+                                            class="btn-blue">
+                                            Bekijk
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
             </div>
         </div>
     </main>
@@ -103,12 +134,13 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="footer-inner">
             <div>
                 <h4>Over Ons</h4>
-                <p>Wij zijn een sportclub die zich richt op het bevorderen van een gezonde levensstijl.</p>
+                <p>Ontdek onze grote selectie films voor iedereen.
+                    Wij helpen onze leden bij het vinden van de perfecte film.</p>
             </div>
             <div>
                 <h4>Snelle Links</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Workouts</a></li>
+                    <li><a href="index.php">Films</a></li>
                 </ul>
             </div>
             <div></div>
