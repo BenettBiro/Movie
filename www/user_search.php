@@ -184,8 +184,8 @@ if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
                                                 <?php endif; ?>
 
                                                 <form method="POST" action="manage_user.php" style="display:inline;"
-                                                    onsubmit="return confirm('Weet je zeker dat je &quot;<?php echo htmlspecialchars(addslashes($r['Username'])); ?>&quot; volledig wilt verwijderen?');">
-                                                    <input type="hidden" name="user_id" value="<?php echo $r['user_id']; ?>">
+                                                    >
+                                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($r['user_id']); ?>">
                                                     <input type="hidden" name="actie" value="verwijder_gebruiker">
                                                     <input type="hidden" name="zoekterm"
                                                         value="<?php echo htmlspecialchars($zoekterm); ?>">

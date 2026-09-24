@@ -11,10 +11,8 @@ if (strtolower($_SESSION['rol'] ?? '') != 'medewerker') {
     exit;
 }
 
-$statusBerichten = [
-    'fout_titel' => 'Filmtitel is verplicht.',
-];
-$fout = null;
+
+
 if (isset($_GET['status']) && isset($statusBerichten[$_GET['status']])) {
     $fout = $statusBerichten[$_GET['status']];
 }
@@ -67,9 +65,7 @@ $landen = ['Nederland', 'België', 'Verenigde Staten', 'Verenigd Koninkrijk', 'F
         <div class="detail-card">
             <div class="detail-content">
 
-                <?php if ($fout): ?>
-                    <p style="color: var(--accent); font-weight: 600;"><?php echo htmlspecialchars($fout); ?></p>
-                <?php endif; ?>
+
 
                 <form method="POST" action="film_make.php">
                     <div class="form-group">
@@ -92,7 +88,8 @@ $landen = ['Nederland', 'België', 'Verenigde Staten', 'Verenigd Koninkrijk', 'F
                         <select name="Genre">
                             <option value="">-- Kies een genre --</option>
                             <?php foreach ($genres as $g): ?>
-                                <option value="<?php echo htmlspecialchars($g); ?>"><?php echo htmlspecialchars($g); ?></option>
+                                <option value="<?php echo htmlspecialchars($g); ?>"><?php echo htmlspecialchars($g); ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -107,7 +104,8 @@ $landen = ['Nederland', 'België', 'Verenigde Staten', 'Verenigd Koninkrijk', 'F
                         <select name="Taal">
                             <option value="">-- Kies een taal --</option>
                             <?php foreach ($talen as $t): ?>
-                                <option value="<?php echo htmlspecialchars($t); ?>"><?php echo htmlspecialchars($t); ?></option>
+                                <option value="<?php echo htmlspecialchars($t); ?>"><?php echo htmlspecialchars($t); ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -117,7 +115,8 @@ $landen = ['Nederland', 'België', 'Verenigde Staten', 'Verenigd Koninkrijk', 'F
                         <select name="Land">
                             <option value="">-- Kies een land --</option>
                             <?php foreach ($landen as $l): ?>
-                             <option value="<?php echo htmlspecialchars($l); ?>"><?php echo htmlspecialchars($l); ?></option>
+                                <option value="<?php echo htmlspecialchars($l); ?>"><?php echo htmlspecialchars($l); ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
